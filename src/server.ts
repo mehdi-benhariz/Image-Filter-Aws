@@ -1,6 +1,5 @@
-import express from "express";
-import bodyParser from "body-parser";
 import { filterImageFromURL, deleteLocalFiles } from "./util/util";
+import express from "express";
 
 (async () => {
   // Init the Express application
@@ -8,9 +7,8 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
 
   // Set the network port
   const port = process.env.PORT || 8082;
-
-  // Use the body parser middleware for post requests
-  app.use(bodyParser.json());
+  require("./startup/security")(app);
+  // require("./startup/db")();
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
@@ -46,8 +44,11 @@ import { filterImageFromURL, deleteLocalFiles } from "./util/util";
       res.sendFile(filteredpath, () => {
         deleteLocalFiles([filteredpath]);
       });
-    } catch (error) {}
+    } catch (error) {
+      logger.error(error);
+    }
   });
+  app.use("/", require("./controllers/vo/index.router"));
 
   // Root Endpoint
   // Displays a simple message to the user
