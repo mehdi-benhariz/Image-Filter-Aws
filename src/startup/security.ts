@@ -16,8 +16,8 @@ module.exports = (app: typeof express) => {
   );
   app.use(
     rateLimit({
-      max: 50,
-      windowMs: 60 * 60 * 1000,
+      max: 100,
+      windowMs: 60 * 1000,
       message: "too many requests , coming from this adr",
     })
   );

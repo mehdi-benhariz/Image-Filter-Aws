@@ -48,7 +48,7 @@ import express from "express";
       logger.error(error);
     }
   });
-  const { IndexRouter } = require("./controllers/vo/index.router");
+  const { IndexRouter } = require("./controllers/v0/index.router");
   app.use("/", IndexRouter);
 
   // Root Endpoint

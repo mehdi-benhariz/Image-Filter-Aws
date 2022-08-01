@@ -1,4 +1,4 @@
-import { V0MODELS } from "../../src/controllers/vo/model.index";
+import { V0MODELS } from "../controllers/v0/model.index";
 import { sequelize } from "../sequelize";
 
 module.exports = async () => {
