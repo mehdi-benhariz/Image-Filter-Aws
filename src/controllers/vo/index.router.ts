@@ -5,8 +5,4 @@ const router: Router = Router();
 
 router.use("/users", UserRouter);
 
-router.get("/", async (req: Request, res: Response) => {
-  res.send(`Hello there!`);
-});
-
 export const IndexRouter: Router = router;

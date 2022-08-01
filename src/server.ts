@@ -4,11 +4,11 @@ import express from "express";
 (async () => {
   // Init the Express application
   const app = express();
-
+  require("dotenv").config();
   // Set the network port
   const port = process.env.PORT || 8082;
   require("./startup/security")(app);
-  // require("./startup/db")();
+  require("./startup/db")();
 
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
@@ -48,7 +48,8 @@ import express from "express";
       logger.error(error);
     }
   });
-  app.use("/", require("./controllers/vo/index.router"));
+  const { IndexRouter } = require("./controllers/vo/index.router");
+  app.use("/", IndexRouter);
 
   // Root Endpoint
   // Displays a simple message to the user

@@ -15,11 +15,10 @@ router.post("/login", async (req: Request, res: Response) => {
   const email = req.body.email;
   const password = req.body.password;
   // check email is valid
-  if (!email || !EmailValidator.validate(email)) {
+  if (!email || !EmailValidator.validate(email))
     return res
       .status(400)
       .send({ auth: false, message: "Email is required or malformed" });
-  }
 
   // check email password valid
   if (!password)
@@ -41,7 +40,14 @@ router.post("/login", async (req: Request, res: Response) => {
   // Generate JWT
   const jwt = User.generateJWT(user);
 
-  res.status(200).send({ auth: true, token: jwt, user: user.short() });
+  res
+    .status(200)
+    .cookie("token", jwt, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60,
+      secure: process.env.NODE_ENV === "production",
+    })
+    .send({ auth: true, token: jwt, user: user.short() });
 });
 
 //register a new user : api/v0/register
@@ -85,10 +91,21 @@ router.post("/", async (req: Request, res: Response) => {
   // Generate JWT
   const jwt = User.generateJWT(savedUser);
 
-  res.status(201).send({ token: jwt, user: savedUser.short() });
+  res
+    .status(201)
+    .cookie("token", jwt, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60,
+      secure: process.env.NODE_ENV === "production",
+    })
+    .send({ token: jwt, user: savedUser.short() });
+});
+router.post("/logOut", requireAuth, async (req: Request, res: Response) => {
+  res.clearCookie("token");
+  res.send({ message: "logged out" });
 });
 
-router.get("/", async (req: Request, res: Response) => {
+router.get("/userinfo", async (req: Request, res: Response) => {
   res.send("auth");
 });
 
